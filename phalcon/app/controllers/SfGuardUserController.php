@@ -186,7 +186,6 @@ class SfGuardUserController extends ControllerBase
      */
     public function saveAction()
     {
-
         if (!$this->request->isPost()) {
             return $this->dispatcher->forward(array(
                 "controller" => "sf_guard_user",
@@ -243,6 +242,27 @@ class SfGuardUserController extends ControllerBase
                 "params" => array($sf_guard_user->id)
             ));
         }
+
+        $sf_guard_user_profile = SfGuardUserProfile::findFirstByUserId($id);
+        if (!$sf_guard_user_profile) {
+            $this->flash->error("sf_guard_user_profile does not exist " . $id);
+
+            return $this->dispatcher->forward(array(
+                "controller" => "sf_guard_user_profile",
+                "action" => "index"
+            ));
+        }
+
+        $sf_guard_user_profile->biography = $this->request->getPost("biography");
+        $sf_guard_user_profile->gender_id = $this->request->getPost("gender_id");
+        $sf_guard_user_profile->birthday_date = $this->request->getPost("birthday_date");
+        $sf_guard_user_profile->avatar_skin = $this->request->getPost("avatar_skin");
+        $sf_guard_user_profile->avatar_hair = $this->request->getPost("avatar_hair");
+        $sf_guard_user_profile->avatar_eyes = $this->request->getPost("avatar_eyes");
+        $sf_guard_user_profile->profile_picture = $this->request->getPost("profile_picture");
+        $sf_guard_user_profile->beelz = $this->request->getPost("beelz");
+        
+        $sf_guard_user_profile->save();
 
         $this->flash->success("sf_guard_user was updated successfully");
 

@@ -199,9 +199,6 @@
                 <?php echo $this->tag->textField(array("cookie", "type" => "date")) ?>
         </td>
     </tr>
-</table>
-
-<table>
     <tr>
         <td align="right">
             <label for="biography">Biography</label>
@@ -215,7 +212,11 @@
             <label for="gender_id">Gender</label>
         </td>
         <td align="left">
-            <?php echo $this->tag->textField(array("gender_id", "type" => "number")) ?>
+            <?php echo $this->tag->select([
+                "gender_id", 
+                Gender::find(), 
+                'using' => ['id', 'name']
+            ]) ?>
         </td>
     </tr>
     <tr>
