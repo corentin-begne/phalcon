@@ -1,0 +1,68 @@
+<?php use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<table width="100%">
+    <tr>
+        <td align="left">
+            <?php echo $this->tag->linkTo(array("sf_guard_user_profile/index", "Go Back")); ?>
+        </td>
+        <td align="right">
+            <?php echo $this->tag->linkTo(array("sf_guard_user_profile/new", "Create ")); ?>
+        </td>
+    </tr>
+</table>
+
+<table class="browse" align="center">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>User</th>
+            <th>Biography</th>
+            <th>Created</th>
+            <th>Updated</th>
+            <th>Gender</th>
+            <th>Birthday Of Date</th>
+            <th>Avatar Of Skin</th>
+            <th>Avatar Of Hair</th>
+            <th>Avatar Of Eyes</th>
+            <th>Profile Of Picture</th>
+            <th>Beelz</th>
+         </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($page->items as $sf_guard_user_profile) { ?>
+        <tr>
+            <td><?php echo $sf_guard_user_profile->id ?></td>
+            <td><?php echo $sf_guard_user_profile->user_id ?></td>
+            <td><?php echo $sf_guard_user_profile->biography ?></td>
+            <td><?php echo $sf_guard_user_profile->created_at ?></td>
+            <td><?php echo $sf_guard_user_profile->updated_at ?></td>
+            <td><?php echo $sf_guard_user_profile->gender_id ?></td>
+            <td><?php echo $sf_guard_user_profile->birthday_date ?></td>
+            <td><?php echo $sf_guard_user_profile->avatar_skin ?></td>
+            <td><?php echo $sf_guard_user_profile->avatar_hair ?></td>
+            <td><?php echo $sf_guard_user_profile->avatar_eyes ?></td>
+            <td><?php echo $sf_guard_user_profile->profile_picture ?></td>
+            <td><?php echo $sf_guard_user_profile->beelz ?></td>
+            <td><?php echo $this->tag->linkTo(array("sf_guard_user_profile/edit/" . $sf_guard_user_profile->id, "Edit")); ?></td>
+            <td><?php echo $this->tag->linkTo(array("sf_guard_user_profile/delete/" . $sf_guard_user_profile->id, "Delete")); ?></td>
+        </tr>
+    <?php } ?>
+    </tbody>
+    <tbody>
+        <tr>
+            <td colspan="2" align="right">
+                <table align="center">
+                    <tr>
+                        <td><?php echo $this->tag->linkTo("sf_guard_user_profile/search", "First") ?></td>
+                        <td><?php echo $this->tag->linkTo("sf_guard_user_profile/search?page=" . $page->before, "Previous") ?></td>
+                        <td><?php echo $this->tag->linkTo("sf_guard_user_profile/search?page=" . $page->next, "Next") ?></td>
+                        <td><?php echo $this->tag->linkTo("sf_guard_user_profile/search?page=" . $page->last, "Last") ?></td>
+                        <td><?php echo $page->current, "/", $page->total_pages ?></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
