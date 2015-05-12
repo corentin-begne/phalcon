@@ -1,28 +1,28 @@
 [
     {
         "name": "phalcon/devtools",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "version": "v2.0.1",
+        "version_normalized": "2.0.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/phalcon/phalcon-devtools.git",
-            "reference": "45a2ce921e08a5163dc6560401decd3a706fcc68"
+            "reference": "c9bfb396123d2ad7deb90299ad5ae8d873341629"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phalcon/phalcon-devtools/zipball/45a2ce921e08a5163dc6560401decd3a706fcc68",
-            "reference": "45a2ce921e08a5163dc6560401decd3a706fcc68",
+            "url": "https://api.github.com/repos/phalcon/phalcon-devtools/zipball/c9bfb396123d2ad7deb90299ad5ae8d873341629",
+            "reference": "c9bfb396123d2ad7deb90299ad5ae8d873341629",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.9"
         },
-        "time": "2015-05-07 19:33:43",
+        "time": "2015-05-07 18:23:31",
         "bin": [
             "phalcon.php"
         ],
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-0": {
                 "Phalcon": "scripts/"
