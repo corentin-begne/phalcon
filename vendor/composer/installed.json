@@ -6,18 +6,18 @@
         "source": {
             "type": "git",
             "url": "https://github.com/phalcon/phalcon-devtools.git",
-            "reference": "103c8989236f4df5206e7d37508216c46799394a"
+            "reference": "45a2ce921e08a5163dc6560401decd3a706fcc68"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phalcon/phalcon-devtools/zipball/103c8989236f4df5206e7d37508216c46799394a",
-            "reference": "103c8989236f4df5206e7d37508216c46799394a",
+            "url": "https://api.github.com/repos/phalcon/phalcon-devtools/zipball/45a2ce921e08a5163dc6560401decd3a706fcc68",
+            "reference": "45a2ce921e08a5163dc6560401decd3a706fcc68",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.6"
+            "php": ">=5.3.9"
         },
-        "time": "2015-02-26 21:47:33",
+        "time": "2015-05-07 19:33:43",
         "bin": [
             "phalcon.php"
         ],
