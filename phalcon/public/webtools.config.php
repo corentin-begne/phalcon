@@ -36,4 +36,4 @@ define('PTOOLS_IP', '192.168.');
  *
  * @var string
  */
-define('PTOOLSPATH', '/var/www/projects/vendor/phalcon/devtools');
+define('PTOOLSPATH', '/var/www/phalcon/vendor/phalcon/devtools');
