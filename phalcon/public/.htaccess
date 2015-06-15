@@ -1,8 +1,12 @@
-AddDefaultCharset UTF-8
+Options +FollowSymLinks +ExecCGI
 
 <IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^(.*)$ index.php?_url=/$1 [QSA,L]
+  RewriteEngine On
+
+  # skip all files with .something
+  RewriteCond %{REQUEST_URI} \..+$
+  RewriteCond %{REQUEST_URI} !\.html$
+  RewriteRule .* - [L]
+  RewriteRule ^(.*)$ /frontend/index.php [QSA,L]
+
 </IfModule>
