@@ -1,18 +1,28 @@
 <?
-class [name] extends ModelBase
+class FeedType extends ModelBase
 {
-    [fields]
+    
+	/**
+	 * @fety_id(['type':'string', 'isNull': false, 'extra': 'auto_increment', 'key': 'PRI', 'length': 20])
+	 */
+	public $id;
+
+	/**
+	 * @fety_name(['type':'string', 'isNull': false, 'length': 64])
+	 */
+	public $name;
+
     /**
      * Initialize method for model.
      */
     public function initialize()
     {
-[constraints]
+
     }
 
     public function getSource()
     {
-        return '[realName]';
+        return 'feed_type';
     }
     /**
      * Independent Column Mapping.
@@ -23,7 +33,8 @@ class [name] extends ModelBase
     public function columnMap()
     {
         return array(
-            [maps]
+            'id' => 'fety_id',
+			'name' => 'fety_name'
         );
     }
 

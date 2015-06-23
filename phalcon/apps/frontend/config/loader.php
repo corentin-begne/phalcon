@@ -1,13 +1,11 @@
 <?php
+use Phalcon\Loader;
 
-$loader = new \Phalcon\Loader();
-
-/**
- * We're a registering a set of directories taken from the configuration file
- */
-$loader->registerDirs(
-    array(
-        $config->application->controllersDir,
-        $config->application->modelsDir
-    )
-)->register();
+$loader = new Loader();
+$loader->registerDirs([
+    $config->application->controllersDir,
+    $config->application->rootDir.'vendor',
+    $config->application->modelsDir
+])
+->registerNamespaces(['Phalcon' => $config->application->rootDir.'vendor'])
+->register();

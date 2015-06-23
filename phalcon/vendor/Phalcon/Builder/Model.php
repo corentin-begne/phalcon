@@ -6,7 +6,7 @@ use Phalcon\Db\Column, Phalcon\Db;
 use Phalcon\Text as Utils;
 class Model extends \Phalcon\Mvc\User\Component
 {
-
+    public $constraints = [];
     /**
      * Returns the associated PHP type
      *
@@ -16,18 +16,18 @@ class Model extends \Phalcon\Mvc\User\Component
     public function getPHPType($type)
     {
         switch ($type) {
-            case Column::TYPE_INTEGER:
+            case 'int':
                 return 'integer';
                 break;
-            case Column::TYPE_DECIMAL:
-            case Column::TYPE_FLOAT:
+            case 'decimal':
+            case 'float':
                 return 'double';
                 break;
-            case Column::TYPE_DATE:
-            case Column::TYPE_VARCHAR:
-            case Column::TYPE_DATETIME:
-            case Column::TYPE_CHAR:
-            case Column::TYPE_TEXT:
+            case 'date':
+            case 'varchar':
+            case 'datetime':
+            case 'char':
+            case 'text':
                 return 'string';
                 break;
             default:
@@ -39,24 +39,24 @@ class Model extends \Phalcon\Mvc\User\Component
     private function getInfos($table, &$fields='', &$maps=array()){
         $modelField = 
 "\n\t/**
-\t * @var([[setting]])
+\t * @[setting]])
 \t */
 \tpublic [name];\n";   
         // fields and map
         foreach($this->db->fetchAll('desc '.$table, Db::FETCH_ASSOC) as &$field){
-            $setting = '';
+            $setting = $this->getPrefix($table)."_".$field['Field'].'([';
             $type = $field['Type'];
             if(strpos($field['Type'], '(') !== false){
                 $type = substr($field['Type'], 0, strpos($field['Type'], '('));
                 $length = substr($field['Type'], strpos($field['Type'], '(')+1);
                 $length = substr($length, 0, strpos($length, ')'));
             }         
-            $setting .= "type:'".$this->getPHPType($field['Type'])."'";
-            $setting .= ', null: '.(($field['Null'] === 'NO') ? "false" : "true");
-            $setting .= (!empty($field['Default'])) ? ', default: \''.$field['Default'].'\'' : '';
-            $setting .= (!empty($field['Extra'])) ? ', extra: \''.$field['Extra'].'\'' : '';
-            $setting .= (!empty($field['Key'])) ? ', key: \''.$field['Key'].'\'' : '';
-            $setting .= (isset($length)) ? ', length: '.$length : '';
+            $setting .= "'type':'".$this->getPHPType($type)."'";
+            $setting .= ', \'isNull\': '.(($field['Null'] === 'NO') ? "false" : "true");
+            $setting .= (!empty($field['Default'])) ? ', \'default\': \''.$field['Default'].'\'' : '';
+            $setting .= (!empty($field['Extra'])) ? ', \'extra\': \''.$field['Extra'].'\'' : '';
+            $setting .= (!empty($field['Key'])) ? ', \'key\': \''.$field['Key'].'\'' : '';
+            $setting .= (isset($length)) ? ', \'length\': '.$length : '';
             $fields .= str_replace(['[setting]', '[name]'], [$setting, '$'.$field['Field']], $modelField);
             $maps[] = "'".$field['Field']."' => '".$this->getPrefix($table)."_".$field['Field']."'";
         }
@@ -92,6 +92,22 @@ class Model extends \Phalcon\Mvc\User\Component
                     $model,
                     $foreign,
                     $foreignTable
+                ], $modelConstraint);
+                if(!isset($this->constraints[$model])){
+                    $this->constraints[$model] = [];
+                }
+                $this->constraints[$model][] = str_replace([
+                    '[type]',
+                    '[local]',
+                    '[model]',
+                    '[foreign]',
+                    '[table]',
+                ], [
+                    $type,
+                    $foreign,
+                    Utils::camelize(Utils::uncamelize($table)),
+                    $local,
+                    Utils::uncamelize($table)
                 ], $modelConstraint);
             }
         }

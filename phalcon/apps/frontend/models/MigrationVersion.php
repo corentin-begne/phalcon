@@ -1,18 +1,23 @@
 <?
-class [name] extends ModelBase
+class MigrationVersion extends ModelBase
 {
-    [fields]
+    
+	/**
+	 * @mive_version(['type':'integer', 'isNull': true, 'length': 11])
+	 */
+	public $version;
+
     /**
      * Initialize method for model.
      */
     public function initialize()
     {
-[constraints]
+
     }
 
     public function getSource()
     {
-        return '[realName]';
+        return 'migration_version';
     }
     /**
      * Independent Column Mapping.
@@ -23,7 +28,7 @@ class [name] extends ModelBase
     public function columnMap()
     {
         return array(
-            [maps]
+            'version' => 'mive_version'
         );
     }
 

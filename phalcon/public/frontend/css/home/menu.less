@@ -1,0 +1,102 @@
+.menu{
+    .category{
+        background-color: #EEF2F5;        
+        &:not(:first-child){
+            margin-top: 10px;
+        }
+        h3{
+            height: 36px;
+            padding-left: 22px;
+            line-height: 24px;
+            color: #96C4E1;
+            font-size: 11px;
+            margin: 0px;
+            font-weight: 700;
+            position:relative;
+            font-family: 'PT Sans Narrow', serif;
+            background: url('@{basepath}/images/menu/header.png') repeat-x scroll left top transparent;
+            input{
+                position:absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+            }
+        }
+        .link{      
+            height: 17px;
+            width: 100%;                            
+            line-height: 16px;  
+            position: relative; 
+            a{              
+                text-decoration: none;
+                color: #57778A;
+                font-size: 11px;
+                font-weight: 400;              
+            }
+            .arrow{
+                cursor: pointer;
+                width: 7px;
+                height: 7px;
+                margin-right: 5px;
+                display: inline-block;
+                background-image: url('@{basepath}/images/menu/arrow.gif');
+            }
+            &:hover{
+                & > .arrow{
+                    background-image: url('@{basepath}/images/menu/arrowHover.gif');
+                }
+            }
+            input{
+                position: absolute;
+                top:0px;
+                left:0px;
+                width: 100%;
+            }
+        }
+        .label{
+            padding-left: 15px;
+            color: #111111;
+            font-size: 12px;
+            margin-bottom: 10px;
+            input{
+                background: none repeat scroll 0 0 #C5C6C8;
+                border: medium none;
+                color: #FEFEFE;
+                font-size: 11px;
+                height: 20px;
+                line-height: 14px;
+                padding: 2px 4px;
+            }
+        }
+        .action{
+            padding: 30px 0px 20px 15px;
+            .passForgot{
+                margin: 10px 0px 0px 10px;
+                a{
+                    color: #777;
+                    text-decoration: none;
+                    font-size: 12px;
+                    &:hover{
+                        color: #1F79EB;
+                    }
+                }
+            }
+        }    
+        .connect, .disconnect{
+            font-family: Arial;
+            background: url("@{basepath}/images/button.gif") repeat-x scroll left top transparent;
+            border: 1px solid #000;
+            color: #ccc;
+            font-weight: 400;
+            height: 20px;
+            width: 80px;
+            cursor: pointer;
+            font-size: 12px;
+            line-height: 18px;
+            text-align: center;
+        }
+        .disconnect{
+            margin: 10px auto;
+        }
+    }
+}

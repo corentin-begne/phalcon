@@ -2,8 +2,6 @@
 
 namespace Phalcon\Builder;
 
-use Phalcon\Text as Utils;
-
 class Js extends \Phalcon\Mvc\User\Component
 {
     public function __construct($controller, $actions){

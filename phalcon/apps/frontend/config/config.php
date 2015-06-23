@@ -7,7 +7,7 @@ return new \Phalcon\Config([
             'host'        => 'localhost',
             'username'    => 'root',
             'password'    => 'B3l00l459',
-            'dbname'      => 'kapeco',
+            'dbname'      => 'beloola',
             'charset'     => 'utf8',
         ]
     ],
@@ -28,7 +28,8 @@ return new \Phalcon\Config([
         'pluginsDir'     => __DIR__ . '/../plugins/',
         'libraryDir'     => __DIR__ . '/../library/',
         'cacheDir'       => __DIR__ . '/../cache/',
-        'publicDir'       => __DIR__ . '/../../../public/frontend/',
+        'publicDir'      => __DIR__ . '/../../../public/frontend/',
+        'rootDir'        => __DIR__ . '/../../../',
         'baseUri'        => '/',
     ]
 ]);

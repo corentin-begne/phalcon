@@ -1,7 +1,7 @@
 <?php
 
 use Phalcon\CLI\Console as ConsoleApp;
-
+error_reporting(E_ALL);
 define('VERSION', '1.0.0');
 /**
 * Process the console arguments

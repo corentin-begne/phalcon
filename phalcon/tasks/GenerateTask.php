@@ -2,6 +2,8 @@
 use Phalcon\Builder\Model,
 Phalcon\Builder\Controller,
 Phalcon\Builder\Js,
+Phalcon\Builder\Css,
+Phalcon\Builder\Less,
 Phalcon\Text as Utils;
 class GenerateTask extends \Phalcon\CLI\Task
 {
@@ -13,9 +15,24 @@ class GenerateTask extends \Phalcon\CLI\Task
      * generate all models
      */
     public function modelsAction() {
+        $constraints = [];
         foreach($this->db->listTables($this->config[ENV]->database->dbname) as &$table){
-            new Model($table);                                           
-        }       
+            $model = new Model($table);           
+            if(isset($model->constraints)){
+                foreach($model->constraints as $name => $lines){
+                    if(!isset($constraints[$name])){
+                        $constraints[$name] = [];
+                    }
+                    $constraints[$name] = array_merge($constraints[$name], $lines);                           
+                }
+            }
+        }     
+        foreach($constraints as $name => $lines){
+            $target = $this->config->application->modelsDir.$name.'.php';
+            $content = file_get_contents($target);
+            $content = str_replace("initialize()\n    {", "initialize()\n    {\n".implode($lines), $content);
+            file_put_contents($target, $content);
+        }
     }
 
     /**
@@ -38,7 +55,7 @@ class GenerateTask extends \Phalcon\CLI\Task
     }
 
     public function lessAction($params){
-        list($controller, $actions) = $params;
-        new Less($controller, $actions);
+        list($controller, $action) = $params;
+        new Less($controller, $action);
     }
 }
