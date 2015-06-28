@@ -7,34 +7,6 @@ use Phalcon\Text as Utils;
 class Model extends \Phalcon\Mvc\User\Component
 {
     public $constraints = [];
-    /**
-     * Returns the associated PHP type
-     *
-     * @param  string $type
-     * @return string
-     */
-    public function getPHPType($type)
-    {
-        switch ($type) {
-            case 'int':
-                return 'integer';
-                break;
-            case 'decimal':
-            case 'float':
-                return 'double';
-                break;
-            case 'date':
-            case 'varchar':
-            case 'datetime':
-            case 'char':
-            case 'text':
-                return 'string';
-                break;
-            default:
-                return 'string';
-                break;
-        }
-    }
 
     private function getInfos($table, &$fields='', &$maps=array()){
         $modelField = 
@@ -51,7 +23,7 @@ class Model extends \Phalcon\Mvc\User\Component
                 $length = substr($field['Type'], strpos($field['Type'], '(')+1);
                 $length = substr($length, 0, strpos($length, ')'));
             }         
-            $setting .= "'type':'".$this->getPHPType($type)."'";
+            $setting .= "'type':'".$type."'";
             $setting .= ', \'isNull\': '.(($field['Null'] === 'NO') ? "false" : "true");
             $setting .= (!empty($field['Default'])) ? ', \'default\': \''.$field['Default'].'\'' : '';
             $setting .= (!empty($field['Extra'])) ? ', \'extra\': \''.$field['Extra'].'\'' : '';
@@ -78,38 +50,42 @@ class Model extends \Phalcon\Mvc\User\Component
             $foreignTable = $reference->getReferencedTable();                        
             $local = $this->getPrefix($table).'_'.$reference->getColumns()[0];
             $foreign = $this->getPrefix($foreignTable).'_'.$reference->getReferencedColumns()[0];           
+            $fieldDesc = $this->db->fetchOne('show columns from '.$table.' where Field = \''.$reference->getColumns()[0] .'\'', Db::FETCH_ASSOC);
             $model = Utils::camelize(Utils::uncamelize($foreignTable));
-            foreach (['belongsTo', 'hasMany'] as $type) {
-                $constraints .= str_replace([
-                    '[type]',
-                    '[local]',
-                    '[model]',
-                    '[foreign]',
-                    '[table]',
-                ], [
-                    $type,
-                    $local,
-                    $model,
-                    $foreign,
-                    $foreignTable
-                ], $modelConstraint);
-                if(!isset($this->constraints[$model])){
-                    $this->constraints[$model] = [];
-                }
-                $this->constraints[$model][] = str_replace([
-                    '[type]',
-                    '[local]',
-                    '[model]',
-                    '[foreign]',
-                    '[table]',
-                ], [
-                    $type,
-                    $foreign,
-                    Utils::camelize(Utils::uncamelize($table)),
-                    $local,
-                    Utils::uncamelize($table)
-                ], $modelConstraint);
+            $constraints .= str_replace([
+                '[type]',
+                '[local]',
+                '[model]',
+                '[foreign]',
+                '[table]',
+            ], [
+                'belongsTo',
+                $local,
+                $model,
+                $foreign,
+                Utils::uncamelize($foreignTable).'_'.$reference->getColumns()[0]
+            ], $modelConstraint);
+            if(!isset($this->constraints[$model])){
+                $this->constraints[$model] = [];
             }
+            if($fieldDesc['Key'] === 'UNI'){
+                $type = 'hasOne';
+            } else {
+                $type = 'hasMany';
+            }
+            $this->constraints[$model][] = str_replace([
+                '[type]',
+                '[local]',
+                '[model]',
+                '[foreign]',
+                '[table]',
+            ], [
+                $type,
+                $foreign,
+                Utils::camelize(Utils::uncamelize($table)),
+                $local,
+                Utils::uncamelize($table).'_'.$reference->getColumns()[0]
+            ], $modelConstraint);
         }
     }
 
@@ -133,10 +109,10 @@ class Model extends \Phalcon\Mvc\User\Component
             $maps], 
             $source);
         $target = $this->config->application->modelsDir.$name.'.php';
-        if(!file_exists($target)){
+     //   if(!file_exists($target)){
             file_put_contents($target, $content);
             echo $target."\n";
-        }
+     //   }
     }
 
 }

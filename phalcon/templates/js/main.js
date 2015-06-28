@@ -1,17 +1,17 @@
-/*global [className]Manager, LoginHelper */
-
+/*global [className]Manager */
 var [name]Manager;
 (function(){
-    "use strict";
     /** on document ready */
     $(document).ready(init);
 
     /**
-     * init helpers / main class
+     * @name main#init[className]
+     * @event
+     * @description initialize [name]
      */
-    function (){
-        new JsHelper([LoginHelper, window["AdminHelper"]]);
-        [name]Manager = new [className]Manager();
+    function init(){
+        new JsHelper({ManagerHelper:[className]Manager});
+        [name]Manager = [className]Manager.getInstance();
     }
     
 })();

@@ -8,6 +8,7 @@ class [name] extends ModelBase
     public function initialize()
     {
 [constraints]
+        parent::initialize();
     }
 
     public function getSource()

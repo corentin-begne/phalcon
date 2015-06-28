@@ -29,7 +29,7 @@ var PaginationHelper;
                             "<span id='last'>>></span>"+
                         "</span>"+
                     "</div>";
-        this.init(1);
+        this.init((isDefined(params.currentPage) ? params.currentPage : 1));
     };
 
     /** 

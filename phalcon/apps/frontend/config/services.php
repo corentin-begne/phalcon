@@ -6,12 +6,15 @@ use Phalcon\Mvc\Url;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
+use Phalcon\Mvc\Router;
+use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Mvc\Dispatcher;
 
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
  */
 $di = new FactoryDefault();
-
+$di->set('config', $config);
 /**
  * The URL component is used to generate all kind of urls in the application
  */
@@ -22,6 +25,21 @@ $di->set('url', function () use ($config) {
     return $url;
 }, true);
 
+$di->set('router', function () use ($config) {
+    $router = new Router(false);
+
+    $router->add("/scrud/{model}/:action",[
+        'controller' => 'scrud',
+        'action'     => 2
+    ]);
+    $router->add("/scrud/{model}/", [
+        'controller' => 'scrud',
+        'action'     => 'index'
+    ]);
+
+    return $router;
+}, true);
+
 /**
  * Setting up the view component
  */
@@ -29,6 +47,7 @@ $di->set('view', function () use ($config) {
 
     $view = new View();
     $view->setViewsDir($config->application->viewsDir);
+    $view->setPartialsDir('partials');
     $view->registerEngines([
         '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
     ]);
@@ -64,4 +83,14 @@ $di->set('session', function () {
     $session->start();
 
     return $session;
+});
+
+$di->set('dispatcher', function() {
+    $eventsManager = new EventsManager;
+    //$eventsManager->attach('dispatch:beforeDispatch', new SecurityPlugin());
+    $eventsManager->attach('dispatch:beforeDispatch', new AssetsPlugin());
+
+    $dispatcher = new Dispatcher;   
+    $dispatcher->setEventsManager($eventsManager);
+    return $dispatcher;
 });

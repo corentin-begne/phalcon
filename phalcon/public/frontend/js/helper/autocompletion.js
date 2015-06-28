@@ -20,7 +20,6 @@ var AutocompletionHelper;
         this.container = params.container;
         this.find = params.cbFind;
         this.select = params.cbSelect;
-        this.id = isDefined(params.id) ? params.id : "";
         this.init();
     };
 
@@ -37,7 +36,7 @@ var AutocompletionHelper;
         /** initialize container with input and result container */
         this.container.append(
             "<div>"+
-                "<input "+((this.id!=="") ? "id='"+this.id+"'" : "")+" autofocus type='text' />"+
+                "<input autofocus type='text' />"+
             "</div>"+
             "<div class='resultContainer'></div>");
         var input = this.container.find("input");

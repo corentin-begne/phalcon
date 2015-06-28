@@ -1,7 +1,6 @@
 /*global isDefined */
 var JsHelper;
 (function(){
-    "use strict";
     /**
     * @name JsHelper
     * @description Globalize some javascript functions/consts
@@ -20,23 +19,9 @@ var JsHelper;
         /** assing functions */
         $.each(this, addGlobalFunction);
 
-        $.extend($.expr[":"],{
-            isEmpty: function(el){
-                return $(el).val() === "";
-            }
-        });
-        $.extend($.expr[":"],{
-            isNotInt: function(el){
-                return isNaN($(el).val());
-            }
-        });
-
-        helpers.forEach(initHelper);
-
-        function initHelper(helper){
-            if(isDefined(helper)){
-                helper.getInstance().init();
-            }
+        /** instanciate helpers */
+        if(isDefined(helpers)){
+            $.each(helpers, addHelper);   
         }
 
         /**
@@ -47,11 +32,18 @@ var JsHelper;
         * @description Globalize all JsHelper function except init
         */
         function addGlobalFunction(name, value){
-
             if(name !== "init"){
                 window[name] = value;
             }
+        }
 
+        function addHelper(helper, params){
+            helper = window[helper];
+            if(isDefined(helper.getInstance)){
+                helper.getInstance().init(params);
+            }else{
+                new helper(params);
+            }
         }
     };
 

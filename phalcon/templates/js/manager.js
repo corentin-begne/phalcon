@@ -1,18 +1,21 @@
 /*global ActionModel */
 var [className]Manager;
 (function(){
-    "use strict";
     /**
-    * @class [className]Manager
+    * @class TemplateManager
     * @constructor
     * @property {ActionModel} action Instance of ActionModel
+    * @description  Manage template
     */
-    [className]Manager = function(){
+    [className]Manager = function [className]Manager(){
+        extendSingleton([className]Manager);
         this.basePath = "[path]/";
         this.action = ActionModel.getInstance();
+        this.manager = ManagerModel.getInstance();
     };
 
-    /** initialize events */
-    [className]Manager.prototype.init = function(){
+    [className]Manager.getInstance = function(){
+        return getSingleton([className]Manager);
     };
+    
 })();
