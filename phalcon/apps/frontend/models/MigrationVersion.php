@@ -1,31 +1,24 @@
 <?
-class DiagnosticState extends ModelBase
+class MigrationVersion extends ModelBase
 {
     
 	/**
-	 * @dist_id(['type':'int', 'isNull': false, 'extra': 'auto_increment', 'key': 'PRI', 'length': 11])
+	 * @mive_version(['type':'int', 'isNull': true, 'length': 11])
 	 */
-	public $id;
-
-	/**
-	 * @dist_name(['type':'varchar', 'isNull': false, 'length': 64])
-	 */
-	public $name;
+	public $version;
 
     /**
      * Initialize method for model.
      */
     public function initialize()
     {
-		$this->hasMany('dist_id', 'Diagnostic', 'di_state_id', array('alias' => 'diagnostic_state_id'));
-
 
         parent::initialize();
     }
 
     public function getSource()
     {
-        return 'DiagnosticState';
+        return 'migration_version';
     }
     /**
      * Independent Column Mapping.
@@ -36,8 +29,7 @@ class DiagnosticState extends ModelBase
     public function columnMap()
     {
         return array(
-            'id' => 'dist_id',
-			'name' => 'dist_name'
+            'version' => 'mive_version'
         );
     }
 

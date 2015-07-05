@@ -37,6 +37,20 @@ $di->set('router', function () use ($config) {
         'action'     => 'index'
     ]);
 
+    $router->addPost("/api/{model}/:action",[
+        'controller' => 'api',
+        'action'     => 2
+    ]);
+
+    $router->add("/:controller/:action", [
+        'controller' => 1,
+        'action'     => 2
+    ]);
+    $router->add("/:controller/", [
+        'controller' => 1,
+        'action'     => 'index'
+    ]);
+
     return $router;
 }, true);
 

@@ -10,7 +10,7 @@ var ActionHelper;
     */
     ActionHelper = function(){
         extendSingleton(ActionHelper);
-        this.basePath = $("html").attr("basePath")+"/";
+        this.basePath = "/";
         var hasOnProgress = ("onprogress" in $.ajaxSettings.xhr());
         if (!hasOnProgress) {
             return;
@@ -73,7 +73,7 @@ var ActionHelper;
             url: this.basePath+options.action,
             dataType:options.dataType,
             success: check,
-            error: removeBackdrop,
+            error: checkError,
             complete: removeBackdrop,
             progress: updateLoader
         };        
@@ -99,6 +99,10 @@ var ActionHelper;
                     progress : event.loaded / event.total
                 });   
             }       
+        }
+
+        function checkError(event){
+            options.cb({success:false, error:event});
         }
 
         function check(data){

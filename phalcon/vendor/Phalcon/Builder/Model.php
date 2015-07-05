@@ -22,6 +22,9 @@ class Model extends \Phalcon\Mvc\User\Component
                 $type = substr($field['Type'], 0, strpos($field['Type'], '('));
                 $length = substr($field['Type'], strpos($field['Type'], '(')+1);
                 $length = substr($length, 0, strpos($length, ')'));
+                if(strpos($length, ',') !== false){
+                    $length = substr($length, 0, strpos($length, ','));
+                }
             }         
             $setting .= "'type':'".$type."'";
             $setting .= ', \'isNull\': '.(($field['Null'] === 'NO') ? "false" : "true");

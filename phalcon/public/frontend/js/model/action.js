@@ -76,6 +76,10 @@ var ActionModel;
         this.action.execute(data, options);
     };
 
+    ActionModel.prototype.api = function(path, data, cb){
+        this.sendForm('api/'+path, data, cb);
+    };
+
     ActionModel.prototype.sendData = function(path, data, cb){
         var options = {
             type: "post",

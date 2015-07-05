@@ -22,8 +22,9 @@ var ManagerModel;
         return getSingleton(ManagerModel);
     };
 
-    ManagerModel.prototype.init = function(manager) {
-        var that = this;                
+    ManagerModel.prototype.init = function(manager, container) {
+        var that = this;       
+        this.container = isDefined(container) ? container : $('body');         
         var selectors = {
             ".action":action
         };

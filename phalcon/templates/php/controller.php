@@ -1,3 +1,3 @@
 <?
-class [name]Controller extends \Phalcon\Mvc\Controller{
+class [name]Controller extends ControllerBase{
 }

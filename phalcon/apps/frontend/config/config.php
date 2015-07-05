@@ -7,7 +7,7 @@ return new \Phalcon\Config([
             'host'        => 'localhost',
             'username'    => 'root',
             'password'    => 'B3l00l459',
-            'dbname'      => 'kapeco',
+            'dbname'      => 'beloola',
             'charset'     => 'utf8',
         ]
     ],

@@ -9,9 +9,9 @@ var [className]Manager;
     */
     [className]Manager = function [className]Manager(){
         extendSingleton([className]Manager);
-        this.basePath = "[path]/";
+        this.basePath = "[path]";
         this.action = ActionModel.getInstance();
-        this.manager = ManagerModel.getInstance();
+        this.manager = ManagerHelper.getInstance();
     };
 
     [className]Manager.getInstance = function(){

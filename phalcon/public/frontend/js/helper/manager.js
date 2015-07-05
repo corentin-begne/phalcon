@@ -21,8 +21,8 @@ var ManagerHelper;
         return getSingleton(ManagerHelper);
     };
 
-    ManagerHelper.prototype.init = function(manager) {
+    ManagerHelper.prototype.init = function(manager, container) {
         manager = !isDefined(manager) ? window[arguments.callee.caller.caller.name] : manager;
-        this.manager.init(manager.getInstance());
+        this.manager.init(manager.getInstance(), container);
     };
 })();

@@ -9,13 +9,22 @@ var CreateScrudManager;
     */
     CreateScrudManager = function CreateScrudManager(){
         extendSingleton(CreateScrudManager);
-        this.basePath = "scrud/create//";
-        this.action = ActionModel.getInstance();
-        this.manager = ManagerModel.getInstance();
+        this.type = "create";
+        this.action = "create";
+        this.form = FormHelper.getInstance();
+        this.container = $("#createForm.template");
     };
 
     CreateScrudManager.getInstance = function(){
         return getSingleton(CreateScrudManager);
+    };
+
+    CreateScrudManager.prototype.validForm = function(element, event){
+        this.form.valid(this.type, event);
+    };
+
+    CreateScrudManager.prototype.cancelForm = function(element, event){
+        this.form.cancel(event);
     };
     
 })();

@@ -1,14 +1,14 @@
 <?
-class FakeLink extends ModelBase
+class ReportStatus extends ModelBase
 {
     
 	/**
-	 * @fali_id(['type':'int', 'isNull': false, 'extra': 'auto_increment', 'key': 'PRI', 'length': 11])
+	 * @rest_id(['type':'bigint', 'isNull': false, 'extra': 'auto_increment', 'key': 'PRI', 'length': 20])
 	 */
 	public $id;
 
 	/**
-	 * @fali_name(['type':'varchar', 'isNull': false, 'length': 64])
+	 * @rest_name(['type':'varchar', 'isNull': false, 'length': 64])
 	 */
 	public $name;
 
@@ -17,13 +17,15 @@ class FakeLink extends ModelBase
      */
     public function initialize()
     {
+		$this->hasMany('rest_id', 'SfGuardUserReport', 'sfguusre_status_id', array('alias' => 'sf_guard_user_report_status_id'));
+
 
         parent::initialize();
     }
 
     public function getSource()
     {
-        return 'FakeLink';
+        return 'report_status';
     }
     /**
      * Independent Column Mapping.
@@ -34,8 +36,8 @@ class FakeLink extends ModelBase
     public function columnMap()
     {
         return array(
-            'id' => 'fali_id',
-			'name' => 'fali_name'
+            'id' => 'rest_id',
+			'name' => 'rest_name'
         );
     }
 

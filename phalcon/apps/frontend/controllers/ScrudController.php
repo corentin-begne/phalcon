@@ -1,31 +1,65 @@
 <?
-use Phalcon\Text as Utils;
+use Phalcon\Text as Utils,
+Phalcon\Tag;
 class ScrudController extends ControllerBase{
 	
+    public $excludes = [];
+
 	public function beforeExecuteRoute($dispatcher)
     {
     	$this->view->setLayout('scrud');
-    	$model = Utils::camelize(Utils::uncamelize($dispatcher->getParam('model')));
-    	if(!class_exists($model)){
-    		die($this->flash->error("Model does not exists"));
-    	}
-        $this->view->setVar('model', $model);
+        $this->models = [];
+        $models = explode(' ', $dispatcher->getParam('model'));
+        for($i=0; $i<count($models); $i++){
+            $models[$i] = Utils::camelize(Utils::uncamelize($models[$i]));
+    	    $model = $models[$i];            
+        	if(!class_exists($model)){
+        		die($this->flash->error("Model $model does not exists"));
+        	}
+            if($i>0){
+                $className = $this->models[0];
+                if(!$className::checkHasOne($model)){
+                    die($this->flash->error("Model $className hasOne relation to $model does not exists"));
+                }
+            }
+            $this->models[] = $model;            
+        }
+        $this->view->setVar('models', $this->models);
     }
 
 	public function indexAction(){
-		$this->dispatcher->forward([
-            'controller' => 'scrud',
-            'action' => 'search'
 
-        ]);
 	}
 
 	public function searchAction(){
-		
+	  
 	}
 
 	public function readAction(){
-
+        $refModel = $this->models[0];
+        $primaryKey = $refModel::getPrimaryKey();
+        $refValue = $this->request->get($primaryKey);
+        if(!isset($refValue)){
+            die($this->flash->error("Missing mandatory param !"));
+        }
+        for($i=0; $i<count($this->models); $i++){  
+            $model = $this->models[$i];          
+            if($i === 0){
+                $field = $model::getMapped($model::getPrimaryKey());
+            } else {
+                $field = $refModel::getReferencedField($model);
+            }            
+            $fn = 'findFirstBy'.Utils::camelize($field);
+            $row = $model::$fn($refValue);
+            if(!$row){
+                die($this->flash->error("$primaryKey $refValue not Found !"));
+            }
+            foreach($row->toArray() as $name => $value){
+                Tag::setDefault($name, $value);
+            }
+        }
+        Tag::setDefault($primaryKey, $refValue);
+        $this->view->setVar('primaryKey', $primaryKey);
 	}
 
 	public function createAction(){

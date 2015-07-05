@@ -1,14 +1,14 @@
 <?
-class Permission extends ModelBase
+class FeedType extends ModelBase
 {
     
 	/**
-	 * @pe_id(['type':'int', 'isNull': false, 'extra': 'auto_increment', 'key': 'PRI', 'length': 11])
+	 * @fety_id(['type':'bigint', 'isNull': false, 'extra': 'auto_increment', 'key': 'PRI', 'length': 20])
 	 */
 	public $id;
 
 	/**
-	 * @pe_name(['type':'varchar', 'isNull': false, 'length': 64])
+	 * @fety_name(['type':'varchar', 'isNull': false, 'length': 64])
 	 */
 	public $name;
 
@@ -17,15 +17,13 @@ class Permission extends ModelBase
      */
     public function initialize()
     {
-		$this->hasMany('pe_id', 'UserPermission', 'uspe_permission_id', array('alias' => 'user_permission_permission_id'));
-
 
         parent::initialize();
     }
 
     public function getSource()
     {
-        return 'Permission';
+        return 'feed_type';
     }
     /**
      * Independent Column Mapping.
@@ -36,8 +34,8 @@ class Permission extends ModelBase
     public function columnMap()
     {
         return array(
-            'id' => 'pe_id',
-			'name' => 'pe_name'
+            'id' => 'fety_id',
+			'name' => 'fety_name'
         );
     }
 

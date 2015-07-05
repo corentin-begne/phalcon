@@ -1,14 +1,14 @@
 <?
-class AgencyType extends ModelBase
+class MediaTag extends ModelBase
 {
     
 	/**
-	 * @agty_id(['type':'int', 'isNull': false, 'extra': 'auto_increment', 'key': 'PRI', 'length': 11])
+	 * @meta_id(['type':'bigint', 'isNull': false, 'extra': 'auto_increment', 'key': 'PRI', 'length': 20])
 	 */
 	public $id;
 
 	/**
-	 * @agty_name(['type':'varchar', 'isNull': false, 'length': 64])
+	 * @meta_name(['type':'varchar', 'isNull': false, 'length': 64])
 	 */
 	public $name;
 
@@ -17,7 +17,7 @@ class AgencyType extends ModelBase
      */
     public function initialize()
     {
-		$this->hasMany('agty_id', 'Agency', 'ag_type_id', array('alias' => 'agency_type_id'));
+		$this->hasMany('meta_id', 'SfGuardUserMediaTag', 'sfguusmeta_tag_id', array('alias' => 'sf_guard_user_media_tag_tag_id'));
 
 
         parent::initialize();
@@ -25,7 +25,7 @@ class AgencyType extends ModelBase
 
     public function getSource()
     {
-        return 'AgencyType';
+        return 'media_tag';
     }
     /**
      * Independent Column Mapping.
@@ -36,8 +36,8 @@ class AgencyType extends ModelBase
     public function columnMap()
     {
         return array(
-            'id' => 'agty_id',
-			'name' => 'agty_name'
+            'id' => 'meta_id',
+			'name' => 'meta_name'
         );
     }
 
