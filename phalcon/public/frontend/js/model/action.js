@@ -66,27 +66,31 @@ var ActionModel;
      * @param  {Function} [cb]   Callback trigger on success with Object data
      */
     ActionModel.prototype.sendDataNoLoad = function(path, data, cb){
-        var options = {
-            type: "post",
-            noload: true,
-            action: path,
-            cb: cb,
-            dataType: "json"
-        };
-        this.action.execute(data, options);
+        this.sendData(path, data, cb, true);
     };
 
-    ActionModel.prototype.api = function(path, data, cb){
+    ActionModel.prototype.apiForm = function(path, data, cb){
         this.sendForm('api/'+path, data, cb);
     };
 
-    ActionModel.prototype.sendData = function(path, data, cb){
+    ActionModel.prototype.api = function(path, data, cb){
+        this.sendData('api/'+path, data, cb);
+    };
+
+    ActionModel.prototype.apiNoLoad = function(path, data, cb){
+        this.sendData('api/'+path, data, cb, true);
+    };
+
+    ActionModel.prototype.sendData = function(path, data, cb, noload){
         var options = {
             type: "post",
             action: path,
             cb: cb,
             dataType: "json"
         };
+        if(isDefined(noload)){
+            options.noload = noload;
+        }
         this.action.execute(data, options);
     };
 
@@ -97,7 +101,7 @@ var ActionModel;
      * @param  {Object}   [data] Data to send to the action
      * @param  {Function} [cb]   Callback trigger on success with Object data
      */
-    ActionModel.prototype.sendForm = function(path, data, cb){
+    ActionModel.prototype.sendForm = function(path, data, cb, noload){
         var options = {
             type: "post",
             action: path,
@@ -105,6 +109,9 @@ var ActionModel;
             dataType: "json",
             form: true
         };
+        if(isDefined(noload)){
+            options.noload = noload;
+        }
         this.action.execute(data, options);
     };
     ActionModel.prototype.sendFormUpload = function(path, data, cb){

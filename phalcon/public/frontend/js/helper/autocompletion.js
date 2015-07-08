@@ -14,11 +14,16 @@ var AutocompletionHelper;
      * @param    {Object}       [params]                    Object containing DOMElement and cb needed
      */
     AutocompletionHelper = function(params){
-        this._typingSpeed = 100;
+        this._typingSpeed = 300;
         this._fadeSpeed = 150;
+        this.class = isDefined(params.class) ? params.class : "";
+        this.restrict = isDefined(params.restrict) ? params.restrict : false;
         this.placeholder = isDefined(params.placeholder) ? params.placeholder : "";
+        this.attr = isDefined(params.attr) ? params.attr : "";
+        this.id = isDefined(params.id) ? "id='"+params.id+"'" : "";
         this.container = params.container;
         this.find = params.cbFind;
+        this.blur = params.cbBlur;
         this.select = params.cbSelect;
         this.init();
     };
@@ -36,18 +41,31 @@ var AutocompletionHelper;
         /** initialize container with input and result container */
         this.container.append(
             "<div>"+
-                "<input autofocus type='text' />"+
+                "<input class='"+this.class+"' "+this.attr+" "+this.id+" type='text' />"+
             "</div>"+
             "<div class='resultContainer'></div>");
         var input = this.container.find("input");
         input.attr("placeholder", this.placeholder);
         var resultContainer = this.container.find(".resultContainer");
+        var searchIcon = this.container.find(".icon-search");
 
         /** assign events */
         input.keydown(selectResult);
         input.keyup(typing);
-        input.blur(hideResultContainer);
+        input.blur(blur);
         input.focus(showResultContainer);
+
+        function blur(){
+            clearTimeout(timer);
+            hideResultContainer();            
+            if($(this).val() !== ""){                                       
+                if(isDefined(that.blur)){
+                    that.blur(resultContainer.find(".result:eq(0)"));                
+                } 
+                $(this).val("");
+                resultContainer.empty();             
+            }
+        }
 
         /**
          * @event AutocompletionHelper#selectResult
@@ -74,13 +92,23 @@ var AutocompletionHelper;
                     /** select */
                     case 13 :
                         if(resultSelected.length !== 0){
-                            isCancel = true;
+                            isCancel = true; 
                             resultSelected.mousedown();
-                            resultContainer.hide().empty();
                         }
                         break;
                 }
                 if(isCancel){
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return false;
+                }
+            }
+
+            if(!that.restrict){
+                if (event.keyCode === 13 && value !== "") {
+                    that.select($("<div>"+value+"</div>"), that.container);
+                    $(this).val("");
+                    resultContainer.hide().empty();
                     event.preventDefault();
                     event.stopPropagation();
                     return false;
@@ -112,8 +140,8 @@ var AutocompletionHelper;
          * @event AutocompletionHelper#typing
          * @description Send input val on typing to autocomplete
          */
-        function typing(){
-            if(!isAvailable || isCancel){
+        function typing(event){
+            if(!isAvailable || isCancel || event.keyCode === 37 || event.keyCode === 39){
                 return false;
             }
 
@@ -133,8 +161,9 @@ var AutocompletionHelper;
              */
             function typingTimeout(){
                 isAvailable = false;
+              //  searchIcon.removeClass("icon-search").addClass("icon-loading");
                 resultContainer.empty();
-                that.find(input.val(), updateResultContainer);
+                that.find(input.val(), updateResultContainer, that.container);
 
                 /**
                  * @method  AutocompletionHelper#updateResultContainer
@@ -158,7 +187,7 @@ var AutocompletionHelper;
                         resultContainer.append(result);
 
                         function selectElement() {
-                            that.select($(this));
+                            that.select($(this), that.container);
                             input.val("");
                             resultContainer.hide().empty();
                         }
@@ -179,6 +208,7 @@ var AutocompletionHelper;
                     }else{
                         hideResultContainer();
                     }
+                  //  searchIcon.removeClass("icon-loading").addClass("icon-search");
                     isAvailable = true;
                 }
             }
@@ -198,7 +228,7 @@ var AutocompletionHelper;
          * @description Fade in result container on input focus
          */
         function showResultContainer(){
-            if(resultContainer.find(".result").length > 0){
+            if(resultContainer.find(".result").length > 0 && input.val() !== ""){
                 resultContainer.fadeIn(that._fadeSpeed);
             }
         }        

@@ -26,7 +26,8 @@ var ManagerModel;
         var that = this;       
         this.container = isDefined(container) ? container : $('body');         
         var selectors = {
-            ".action":action
+            ".action":action,
+            ".actionAutocompletion":autocompletion
         };
         $.each(selectors, addMouseDownEvent);
 
@@ -39,9 +40,22 @@ var ManagerModel;
                 if(!isDefined(actionType)){
                     actionType = "mousedown";                    
                 }
-                $(element).unbind(actionType);
-                $(element).bind(actionType, fn);
+                if(actionType === 'init'){
+                    fn(element);
+                } else {
+                    $(element).unbind(actionType);
+                    $(element).bind(actionType, fn);
+                }
             }
+        }
+
+        function autocompletion(element){
+            var data = $.parseJSON($(element).attr("data"));
+            data.container = $(element);
+            data.cbFind = manager[data.cbFind];
+            data.cbSelect = manager[data.cbSelect];
+            data.cbBlur = manager[data.cbBlur];
+            new AutocompletionHelper(data);
         }
 
         function action(event){

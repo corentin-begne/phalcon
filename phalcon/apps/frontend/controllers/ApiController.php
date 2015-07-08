@@ -31,6 +31,29 @@ class ApiController extends ControllerBase{
         var_dump($className::find($query->getParams()));
 	}
 
+    public function getTypeAction(){
+        Rest::checkParams(['field']);
+        $model = $this->models[0];
+        Rest::renderSuccess($model::getType(Rest::$params['field']));
+    }
+
+    public function completeAction(){
+        Rest::checkParams(['field', 'value']);
+        $limit = isset(Rest::$params['limit']) ? (int)Rest::$params['limit'] : 10;
+        $model = $this->models[0];
+        $result = [];
+        $rows =  $model::find([
+            Rest::$params['field']." like '".Rest::$params['value']."%'",
+            'limit' => $limit,
+            'order' => Rest::$params['field']
+        ]);
+        foreach($rows as $row){
+            $field = Rest::$params['field'];
+            $result[] = "<div class='result' id='".$model::getMapped($model::getPrimaryKey())."'>".$row->$field.'</div>';
+        }
+        Rest::renderSuccess($result);
+    }
+
     public function createAction(){
         $result = [];
         $refModel = $this->models[0];

@@ -31,7 +31,7 @@ var FormHelper;
             return false;
         }
         this.isAvailable = false;
-        this.action.api(container.attr("action")+"/"+window[ucfirst(type)+"ScrudManager"].getInstance().action, new FormData(container[0]), check);
+        this.action.apiForm(container.attr("action")+"/"+window[ucfirst(type)+"ScrudManager"].getInstance().action, new FormData(container[0]), check);
 
         function check(data){
             that.isAvailable = true;

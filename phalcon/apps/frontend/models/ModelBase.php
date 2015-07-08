@@ -23,6 +23,15 @@ class ModelBase extends Model{
         return $descriptions;
     }
 
+    public static function getType($field){
+        $model = get_called_class();
+        foreach($model::getColumnsDescription() as $name => $option){
+            if($name === $field){
+                return $option['type'];
+            }
+        }
+    }
+
     public static function getRelations($type){
         $model = get_called_class();
         $type = 'get'.Utils::camelize(Utils::uncamelize($type));
@@ -53,6 +62,11 @@ class ModelBase extends Model{
                 return $relation->getReferencedFields();
             }
         }
+    }
+
+    public static function getColumnsMap(){
+        $className = get_called_class();
+        return DI::getDefault()->getModelsMetadata()->getReverseColumnMap(new $className());
     }
 
     public static function filterParams($params){

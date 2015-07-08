@@ -16,9 +16,9 @@ class AssetsPlugin extends Component
     public function beforeDispatch(Event $event, Dispatcher $dispatcher)
     {
         $currentPath = ($dispatcher->getActionName() === 'index') ? $dispatcher->getControllerName() : $dispatcher->getControllerName().'/'.$dispatcher->getActionName(); 
-        $basePath = $this->config->application->publicDir.'js/';
+      /*  $basePath = APP.'/js/';//$this->config->application->publicDir.'js/';
         $this->assets->collection('js')
-        ->setTargetPath($basePath.'final.js')
+       // ->setTargetPath($basePath.'final.js')
         ->setTargetUri(APP.'/js/final.js')
         ->addJs($basePath.'lib/jquery.min.js')
         ->addJs($basePath.'lib/jquery.percentageloader-0.2.js')
@@ -29,9 +29,22 @@ class AssetsPlugin extends Component
         ->addJs($basePath.'helper/form.js')
         ->addJs($basePath.'helper/js.js')
         ->addJs("$basePath$currentPath/manager.js")
-        ->addJs("$basePath$currentPath/main.js")
-        ->join(true)
-        ->addFilter(new Jsmin());
+        ->addJs("$basePath$currentPath/main.js");*/
+      //  ->join(true)
+       // ->addFilter(new Jsmin());
+       // 
+        $this->assets->collection('js')
+        ->setPrefix(APP.'/js/')
+        ->addJs('lib/jquery.min.js')
+        ->addJs('lib/jquery.percentageloader-0.2.js')
+        ->addJs('model/action.js')
+        ->addJs('model/manager.js')
+        ->addJs('helper/action.js')
+        ->addJs('helper/manager.js')
+        ->addJs('helper/form.js')
+        ->addJs('helper/js.js')
+        ->addJs("$currentPath/manager.js")
+        ->addJs("$currentPath/main.js");
         
         $this->assets->collection('css')
         ->setPrefix(APP.'/css/')

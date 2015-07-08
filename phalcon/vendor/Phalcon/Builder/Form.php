@@ -53,7 +53,9 @@ class Form extends \Phalcon\Tag
                         'using' => [
                             self::$relations[$name]['field'], 
                             $model::getPrefix().'_name'
-                        ]
+                        ],
+                        'useEmpty' => true,
+                        'emptyText' => '-',
                     ]);
                 } else {
                     $type = 'numeric';

@@ -32,7 +32,39 @@ class ScrudController extends ControllerBase{
 	}
 
 	public function searchAction(){
-	  
+        $this->assets->collection('js')->addJs('helper/autocompletion.js');
+        $this->view->setVar('types', [
+            'numeric' => [
+                '=' => '=',
+                '!=' => '!=',
+                '>=' => '>=',
+                '<=' => '<='
+            ],
+            'text' => [
+                'like' => 'like',
+                'not like' => 'not like',
+                'like%' => 'like%',
+                '%like' => '%like',
+                '%like%' => '%like%',
+                'not like%' => 'not like%',
+                'not %like' => 'not %like',
+                'not %like%' => 'not %like%',
+            ]
+        ]);  
+        $fields = [];
+        foreach($this->models as $model){
+            $fields += [$model => $model::getColumnsMap()];
+        }
+        
+        $model = $this->models[0];
+        $rows = $model::find([
+            'offset' => $offset = (Rest::$currentPage-1)*Rest::$limit,
+            'limit' => Rest::$limit,
+            'order' => $model::getMapped($model::getPrimaryKey())
+        ]);
+        Rest::$nbPage = $rows->getPaginate();
+        $this->view->setVar('fields', [''=>'-']+$fields);
+        $this->view->setVar('rows', $rows);
 	}
 
 	public function readAction(){
