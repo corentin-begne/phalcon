@@ -22,7 +22,10 @@
 <div class='listContainer'>
     <table>
         <tr>
-            <? foreach($this->models as $model): ?>
+            <? foreach($models as $model): ?>
+                <? foreach($model::getColumnsMap() as $id => $name): ?>
+                    <th id='<?=$id?>' alt='<?=$model?>' title='<?=$model?>'><?=$name?></th>
+                <? endforeach; ?>
             <? endforeach; ?>
         </tr>
     </table>

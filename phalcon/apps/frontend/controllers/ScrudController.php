@@ -1,5 +1,6 @@
 <?
 use Phalcon\Text as Utils,
+Phalcon\Tools\Rest,
 Phalcon\Tag;
 class ScrudController extends ControllerBase{
 	
@@ -57,12 +58,13 @@ class ScrudController extends ControllerBase{
         }
         
         $model = $this->models[0];
+        /*
+        $rows = $this->modelsManager->createQuery("");*/
         $rows = $model::find([
             'offset' => $offset = (Rest::$currentPage-1)*Rest::$limit,
             'limit' => Rest::$limit,
             'order' => $model::getMapped($model::getPrimaryKey())
         ]);
-        Rest::$nbPage = $rows->getPaginate();
         $this->view->setVar('fields', [''=>'-']+$fields);
         $this->view->setVar('rows', $rows);
 	}
